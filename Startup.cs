@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using psw_ftn.Services.UserService;
 
 namespace psw_ftn
 {
@@ -32,6 +33,7 @@ namespace psw_ftn
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "psw_ftn", Version = "v1" });
             });
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
