@@ -70,5 +70,22 @@ namespace psw_ftn.Services.UserService
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
+        {
+           var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try {
+                User user = users.First(u => u.UserId == id);
+                users.Remove(user);
+                serviceResponse.Data = users.Select(u => mapper.Map<GetUserDto>(u)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
     }
 }

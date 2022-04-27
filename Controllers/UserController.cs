@@ -46,7 +46,22 @@ namespace psw_ftn.Controllers
                 return NotFound(response);
             }
 
-            return Ok(await userService.UpdateUser(updateUser));
+            return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Delete(int id)
+        {
+           var response = await userService.DeleteUser(id);
+
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+
+        
     }
 }
