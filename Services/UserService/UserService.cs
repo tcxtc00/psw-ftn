@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using psw_ftn.Dtos;
 using psw_ftn.Models;
 
 namespace psw_ftn.Services.UserService
@@ -12,24 +14,32 @@ namespace psw_ftn.Services.UserService
             new User { UserId = 2, FirstName = "Bora", LastName = "Gajic"}
         };
         
-       public async Task<ServiceResponse<List<User>>> addUser(User newUser)
+        private readonly IMapper mapper;
+
+        public UserService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            users.Add(newUser);
-            serviceResponse.Data = users;
+            this.mapper = mapper;
+        }
+        public async Task<ServiceResponse<List<GetUserDto>>> addUser(AddUserDto newUser)
+        {
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            User user = mapper.Map<User>(newUser);
+            user.UserId = users.Max(u => u.UserId) + 1;
+            users.Add(user);
+            serviceResponse.Data = users.Select(u => mapper.Map<GetUserDto>(u)).ToList();
             return serviceResponse;
         }
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            serviceResponse.Data = users;
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            serviceResponse.Data = users.Select(u => mapper.Map<GetUserDto>(u)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<User>> getUserById(int id)
+        public async Task<ServiceResponse<GetUserDto>> getUserById(int id)
         {
-            var serviceResponse = new ServiceResponse<User>();
-            serviceResponse.Data = users.FirstOrDefault(c => c.UserId == id);
+            var serviceResponse = new ServiceResponse<GetUserDto>();
+            serviceResponse.Data = mapper.Map<GetUserDto>(users.FirstOrDefault(u => u.UserId == id));
             return serviceResponse;
         }
     }
