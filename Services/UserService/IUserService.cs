@@ -6,8 +6,8 @@ namespace psw_ftn.Services.UserService
 {
     public interface IUserService
     {
-         Task<List<User>> GetAllUsers();
-         Task<User> getUserById(int id);
-         Task<List<User>> addUser(User newUser);
+         Task<ServiceResponse<List<User>>> GetAllUsers();
+         Task<ServiceResponse<User>> getUserById(int id);
+         Task<ServiceResponse<List<User>>> addUser(User newUser);
     }
 }

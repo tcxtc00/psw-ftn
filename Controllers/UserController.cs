@@ -17,20 +17,20 @@ namespace psw_ftn.Controllers
             this.userService = userService;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<List<User>>> Get()
+         [HttpGet("GetAll")]
+        public async Task<ActionResult<ServiceResponse<List<User>>>> Get()
         {
             return Ok(await userService.GetAllUsers());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<User>>> GetSingle(int id)
         {
             return Ok(await userService.getUserById(id));
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<User>>> AddUser(User newUser)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User newUser)
         {
             return Ok(await userService.addUser(newUser));
         }

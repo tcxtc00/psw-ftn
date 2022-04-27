@@ -12,19 +12,25 @@ namespace psw_ftn.Services.UserService
             new User { UserId = 2, FirstName = "Bora", LastName = "Gajic"}
         };
         
-        public async Task<List<User>> addUser(User newUser)
+       public async Task<ServiceResponse<List<User>>> addUser(User newUser)
         {
+            var serviceResponse = new ServiceResponse<List<User>>();
             users.Add(newUser);
-            return users;
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
-        public async Task<List<User>> GetAllUsers()
+        public async Task<ServiceResponse<List<User>>> GetAllUsers()
         {
-            return users;
+            var serviceResponse = new ServiceResponse<List<User>>();
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
 
-        public async Task<User> getUserById(int id)
+        public async Task<ServiceResponse<User>> getUserById(int id)
         {
-            return users.FirstOrDefault(c => c.UserId == id);
+            var serviceResponse = new ServiceResponse<User>();
+            serviceResponse.Data = users.FirstOrDefault(c => c.UserId == id);
+            return serviceResponse;
         }
     }
 }
