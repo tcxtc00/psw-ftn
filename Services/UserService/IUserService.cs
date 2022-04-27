@@ -10,5 +10,6 @@ namespace psw_ftn.Services.UserService
          Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
          Task<ServiceResponse<GetUserDto>> getUserById(int id);
          Task<ServiceResponse<List<GetUserDto>>> addUser(AddUserDto newUser);
+         Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updateUser);
     }
 }

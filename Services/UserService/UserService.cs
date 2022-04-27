@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,6 +41,33 @@ namespace psw_ftn.Services.UserService
         {
             var serviceResponse = new ServiceResponse<GetUserDto>();
             serviceResponse.Data = mapper.Map<GetUserDto>(users.FirstOrDefault(u => u.UserId == id));
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updateUser)
+        {
+            var serviceResponse = new ServiceResponse<GetUserDto>();
+            try {
+                User user = users.FirstOrDefault(u => u.UserId == updateUser.UserId);
+
+                user.FirstName = updateUser.FirstName;
+                user.LastName = updateUser.LastName;
+                user.Email = updateUser.Email;
+                user.Password = updateUser.Password;
+                user.PwdSalt = updateUser.PwdSalt;
+                user.City = updateUser.City;
+                user.Street = updateUser.Street;
+                user.Phone = updateUser.Phone;
+                user.Status = updateUser.Status;
+
+                serviceResponse.Data = mapper.Map<GetUserDto>(user);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
             return serviceResponse;
         }
     }

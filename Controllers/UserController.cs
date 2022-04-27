@@ -35,5 +35,18 @@ namespace psw_ftn.Controllers
         {
             return Ok(await userService.addUser(newUser));
         }
+
+         [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto updateUser)
+        {
+            var response = await userService.UpdateUser(updateUser);
+
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(await userService.UpdateUser(updateUser));
+        }
     }
 }
