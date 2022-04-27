@@ -33,6 +33,7 @@ namespace psw_ftn
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "psw_ftn", Version = "v1" });
             });
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUserService, UserService>();
         }
 

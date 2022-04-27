@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using psw_ftn.Dtos;
 using psw_ftn.Models;
 using psw_ftn.Services.UserService;
 
@@ -30,7 +31,7 @@ namespace psw_ftn.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User newUser)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(AddUserDto newUser)
         {
             return Ok(await userService.addUser(newUser));
         }
