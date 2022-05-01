@@ -55,8 +55,8 @@ namespace psw_ftn.Services.UserService
                 user.FirstName = updateUser.FirstName;
                 user.LastName = updateUser.LastName;
                 user.Email = updateUser.Email;
-                user.Password = updateUser.Password;
-                user.PwdSalt = updateUser.PwdSalt;
+                user.PasswordHash = updateUser.PasswordHash;
+                user.PasswordSalt = updateUser.PasswordSalt;
                 user.City = updateUser.City;
                 user.Street = updateUser.Street;
                 user.Phone = updateUser.Phone;

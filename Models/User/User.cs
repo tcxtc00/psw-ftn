@@ -11,8 +11,7 @@ namespace psw_ftn.Models
         public string Email { get; set; }
         
         [Required]
-        [MaxLength(50)]
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -35,7 +34,6 @@ namespace psw_ftn.Models
         public int Status { get; set; }
 
         [Required]
-        [MaxLength(16)]
-        public string PwdSalt { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }
