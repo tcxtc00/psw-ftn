@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using psw_ftn.Dtos;
 using psw_ftn.Models;
 
 namespace psw_ftn.Services.UserService
 {
     public interface IUserService
     {
-         Task<List<User>> GetAllUsers();
-         Task<User> getUserById(int id);
-         Task<List<User>> addUser(User newUser);
+         Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
+         Task<ServiceResponse<GetUserDto>> getUserById(int id);
+         Task<ServiceResponse<List<GetUserDto>>> addUser(AddUserDto newUser);
+         Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updateUser);
+         Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id);
     }
 }
