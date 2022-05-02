@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using psw_ftn.Data;
 using psw_ftn.Dtos;
 using psw_ftn.Models;
+using psw_ftn.Models.User;
 
 namespace psw_ftn.Services.UserService
 {

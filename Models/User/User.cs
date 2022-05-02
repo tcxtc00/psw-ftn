@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace psw_ftn.Models
+namespace psw_ftn.Models.User
 {
     public class User
     {

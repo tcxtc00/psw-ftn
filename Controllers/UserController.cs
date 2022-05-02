@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using psw_ftn.Dtos;
 using psw_ftn.Models;
+using psw_ftn.Models.User;
 using psw_ftn.Services.UserService;
 
 namespace psw_ftn.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase

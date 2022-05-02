@@ -1,11 +1,14 @@
 using System.Threading.Tasks;
+using psw_ftn.Models.User;
 using psw_ftn.Models;
+using psw_ftn.Dtos;
+using psw_ftn.Dtos.UserDtos;
 
 namespace psw_ftn.Data
 {
     public interface IAuthRepository
     {
-        Task<ServiceResponse<int>> Register(User user, string password);
+        Task<ServiceResponse<UserDto>> Register(RegisterUserDto request);
         Task<ServiceResponse<string>> Login(string email, string password);
         Task<bool> UserExists(string email);
     }

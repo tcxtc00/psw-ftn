@@ -4,10 +4,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using psw_ftn.Dtos;
+using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models;
+using psw_ftn.Models.User;
+using psw_ftn.Models.User.UserTypes;
 
 namespace psw_ftn.Data
 {
@@ -15,8 +20,10 @@ namespace psw_ftn.Data
     {
         private readonly DataContext context;
         private readonly IConfiguration configuration;
-        public AuthRepository(DataContext context, IConfiguration configuration)
+        private readonly IMapper mapper;
+        public AuthRepository(DataContext context, IConfiguration configuration, IMapper mapper)
         {
+            this.mapper = mapper;
             this.configuration = configuration;
             this.context = context;
         }
@@ -42,10 +49,11 @@ namespace psw_ftn.Data
 
             return response;
         }
-
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<UserDto>> Register(RegisterUserDto request)
         {
-            ServiceResponse<int> response = new ServiceResponse<int>();
+            User user = Utility.UserFromRole(request);
+
+            ServiceResponse<UserDto> response = new ServiceResponse<UserDto>();
             if (await UserExists(user.Email))
             {
                 response.Success = false;
@@ -53,7 +61,7 @@ namespace psw_ftn.Data
                 return response;
             }
 
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            Utility.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -61,24 +69,13 @@ namespace psw_ftn.Data
             context.Add(user);
             await context.SaveChangesAsync();
 
-            response.Data = user.UserId;
+            response.Data = mapper.Map<UserDto>(user);
             return response;
         }
-
         public async Task<bool> UserExists(string email)
         {
             return await context.Users.AnyAsync(u => u.Email.ToLower().Equals(email.ToLower()));
         }
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -94,7 +91,6 @@ namespace psw_ftn.Data
                 return true;
             }
         }
-
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
@@ -102,6 +98,19 @@ namespace psw_ftn.Data
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Name, user.Email)
             };
+
+            if (user.GetType() == typeof(Doctor))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Doctor"));
+            }
+            else if (user.GetType() == typeof(Patient))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Patient"));
+            }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value)
