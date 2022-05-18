@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace psw_ftn.Dtos.UserDtos
 {
     public class UserDto
@@ -10,7 +12,11 @@ namespace psw_ftn.Dtos.UserDtos
         public string City { get; set; }
         public string Phone { get; set; }
         public int Status { get; set; }
+        
+        [JsonIgnore]
         public RoleDto Role { get; set; }
+        
+        [JsonIgnore]
         public string Expertise { get; set; }
     }
 }

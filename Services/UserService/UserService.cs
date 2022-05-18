@@ -63,6 +63,7 @@ namespace psw_ftn.Services.UserService
                 user.Phone = updateUser.Phone;
                 user.Status = updateUser.Status;
 
+                context.Users.Update(user);
                 await context.SaveChangesAsync();
 
                 serviceResponse.Data = mapper.Map<GetUserDto>(user);

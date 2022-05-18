@@ -19,6 +19,37 @@ namespace psw_ftn.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
+                {
+                    b.Property<int>("ChechUpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CancellationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DoctorUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("PatientUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ChechUpId");
+
+                    b.HasIndex("DoctorUserId");
+
+                    b.HasIndex("PatientUserId");
+
+                    b.ToTable("CheckUps");
+                });
+
             modelBuilder.Entity("psw_ftn.Models.User.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -66,7 +97,38 @@ namespace psw_ftn.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
+                {
+                    b.HasBaseType("psw_ftn.Models.CheckUp");
+
+                    b.Property<DateTime>("CancelationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.ToTable("CancelledCheckUps");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
+                {
+                    b.HasBaseType("psw_ftn.Models.CheckUp");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.ToTable("HistoryCheckUps");
                 });
 
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Admin", b =>
@@ -95,6 +157,41 @@ namespace psw_ftn.Migrations
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
+                {
+                    b.HasOne("psw_ftn.Models.User.UserTypes.Doctor", "Doctor")
+                        .WithMany("CheckUps")
+                        .HasForeignKey("DoctorUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("psw_ftn.Models.User.UserTypes.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientUserId");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
+                {
+                    b.HasOne("psw_ftn.Models.CheckUp", null)
+                        .WithOne()
+                        .HasForeignKey("psw_ftn.Models.CancelledCheckUp", "ChechUpId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
+                {
+                    b.HasOne("psw_ftn.Models.CheckUp", null)
+                        .WithOne()
+                        .HasForeignKey("psw_ftn.Models.HistoryCheckUp", "ChechUpId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Admin", b =>
                 {
                     b.HasOne("psw_ftn.Models.User.User", null)
@@ -120,6 +217,11 @@ namespace psw_ftn.Migrations
                         .HasForeignKey("psw_ftn.Models.User.UserTypes.Patient", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Doctor", b =>
+                {
+                    b.Navigation("CheckUps");
                 });
 #pragma warning restore 612, 618
         }

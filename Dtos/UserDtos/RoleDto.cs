@@ -7,6 +7,7 @@ namespace psw_ftn.Dtos.UserDtos
     {
         Patient,
         Doctor,
-        Admin
+        Admin,
+        Undefined
     }
 }

@@ -70,6 +70,7 @@ namespace psw_ftn.Data
             await context.SaveChangesAsync();
 
             response.Data = mapper.Map<UserDto>(user);
+            response.Data.Role = Utility.RoleFromUser(user);
             return response;
         }
         public async Task<bool> UserExists(string email)
@@ -96,12 +97,19 @@ namespace psw_ftn.Data
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
             };
 
             if (user.GetType() == typeof(Doctor))
-            {
+            {   
+                Doctor doctor = (Doctor)user;
                 claims.Add(new Claim(ClaimTypes.Role, "Doctor"));
+
+                if(doctor.Expertise == DrExpertise.Generalist.ToString())
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Generalist"));
+                }
             }
             else if (user.GetType() == typeof(Patient))
             {

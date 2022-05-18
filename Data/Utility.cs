@@ -62,6 +62,24 @@ namespace psw_ftn.Data
                 };
             }
             return user;
+        }   
+        public static RoleDto RoleFromUser(User user)
+        {
+            if (user.GetType() == typeof(Doctor))
+            {
+                return RoleDto.Doctor;
+            }
+
+            if (user.GetType() == typeof(Patient))
+            {
+                return RoleDto.Patient;
+            }
+
+            if (user.GetType() == typeof(Admin))
+            {
+                return RoleDto.Admin;
+            }
+            return RoleDto.Undefined;
         }
     }
 }
