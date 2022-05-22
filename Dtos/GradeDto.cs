@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace psw_ftn.Dtos.CheckUpDtos
+namespace psw_ftn.Dtos
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum GradeDto

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using psw_ftn.Models;
 using psw_ftn.Models.User;
@@ -6,7 +5,7 @@ using psw_ftn.Models.User.UserTypes;
 
 namespace psw_ftn.Data
 {
-   public class DataContext : DbContext
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -34,5 +33,6 @@ namespace psw_ftn.Data
         public DbSet<CheckUp> CheckUps { get; set; }
         public DbSet<HistoryCheckUp> HistoryCheckUps { get; set; }
         public DbSet<CancelledCheckUp> CancelledCheckUps { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
     }
 }

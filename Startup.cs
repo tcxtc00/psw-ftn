@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using psw_ftn.Data;
 using psw_ftn.Services.CheckUpService;
+using psw_ftn.Services.FeedbackService;
 using psw_ftn.Services.UserService;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -45,9 +46,12 @@ namespace psw_ftn
             });
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICheckUpService, CheckUpService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

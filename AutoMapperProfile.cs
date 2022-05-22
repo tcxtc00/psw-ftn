@@ -1,6 +1,7 @@
 using AutoMapper;
 using psw_ftn.Dtos;
 using psw_ftn.Dtos.CheckUpDtos;
+using psw_ftn.Dtos.FeedbackDtos;
 using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models;
 using psw_ftn.Models.User;
@@ -33,6 +34,8 @@ namespace psw_ftn
             CreateMap<HistoryCheckUp, HistoryCheckUpDto>();
             CreateMap<HistoryCheckUpDto, HistoryCheckUp>();
             CreateMap<CheckUp, HistoryCheckUpDto>();
+            CreateMap<AddFeedbackDto, Feedback>();
+            CreateMap<Feedback, GetFeedbackDto>();
         }
     }
 }

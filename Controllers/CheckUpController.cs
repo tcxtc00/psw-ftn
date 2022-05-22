@@ -31,7 +31,7 @@ namespace psw_ftn.Controllers
                 return NotFound(response);
             }
 
-            return Ok(await checkUpService.BookCheckUp(bookCheckUp));
+            return Ok(response);
         }
 
         [HttpGet("GetDoctors")]

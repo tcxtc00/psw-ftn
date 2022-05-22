@@ -50,6 +50,35 @@ namespace psw_ftn.Migrations
                     b.ToTable("CheckUps");
                 });
 
+            modelBuilder.Entity("psw_ftn.Models.Feedback", b =>
+                {
+                    b.Property<int>("FeedbackId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Incognito")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsForDisplay")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FeedbackId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Feedbacks");
+                });
+
             modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
                 {
                     b.Property<int>("CheckUpId")
@@ -173,6 +202,17 @@ namespace psw_ftn.Migrations
                         .HasForeignKey("PatientUserId");
 
                     b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.Feedback", b =>
+                {
+                    b.HasOne("psw_ftn.Models.User.UserTypes.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });

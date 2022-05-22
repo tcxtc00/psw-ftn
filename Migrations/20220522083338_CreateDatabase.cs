@@ -110,6 +110,29 @@ namespace psw_ftn.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    FeedbackId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsForDisplay = table.Column<bool>(type: "bit", nullable: false),
+                    Incognito = table.Column<bool>(type: "bit", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedbacks", x => x.FeedbackId);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CancelledCheckUps",
                 columns: table => new
                 {
@@ -158,6 +181,11 @@ namespace psw_ftn.Migrations
                 column: "PatientUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_PatientId",
+                table: "Feedbacks",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -171,6 +199,9 @@ namespace psw_ftn.Migrations
 
             migrationBuilder.DropTable(
                 name: "CancelledCheckUps");
+
+            migrationBuilder.DropTable(
+                name: "Feedbacks");
 
             migrationBuilder.DropTable(
                 name: "HistoryCheckUps");
