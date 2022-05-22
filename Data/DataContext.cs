@@ -21,11 +21,9 @@ namespace psw_ftn.Data
 
             
             modelBuilder.Entity<Doctor>().ToTable("Doctors");
-            //Dodati unique email za user tabelu
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Admin>().ToTable("Admins");
             modelBuilder.Entity<CheckUp>().ToTable("CheckUps");
-            modelBuilder.Entity<HistoryCheckUp>().ToTable("HistoryCheckUps");
             modelBuilder.Entity<CancelledCheckUp>().ToTable("CancelledCheckUps"); 
         }
 

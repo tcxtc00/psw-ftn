@@ -1,4 +1,5 @@
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace psw_ftn.Dtos.UserDtos
 {
@@ -13,10 +14,10 @@ namespace psw_ftn.Dtos.UserDtos
         public string Phone { get; set; }
         public int Status { get; set; }
         
-        [JsonIgnore]
+        [JsonConverter(typeof(StringEnumConverter))]
         public RoleDto Role { get; set; }
         
-        [JsonIgnore]
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string Expertise { get; set; }
     }
 }

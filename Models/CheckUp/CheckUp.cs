@@ -8,7 +8,7 @@ namespace psw_ftn.Models
     {
         [Required]
         [Key]
-        public int ChechUpId { get; set; }
+        public int CheckUpId { get; set; }
 
         public Patient Patient { get; set; }
         
@@ -23,5 +23,7 @@ namespace psw_ftn.Models
         
         [Required]
         public DateTime CancellationTime { get; set; }
+
+        public HistoryCheckUp HistoryCheckUp { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace psw_ftn.Services.CheckUpService
             .Include(c => c.Doctor)
             .Where(c => c.Doctor.Expertise == drExpertiseQuery
             && c.Patient == null)
-            .FirstOrDefaultAsync(c => c.ChechUpId == bookCheckUp.ChechUpId);
+            .FirstOrDefaultAsync(c => c.CheckUpId == bookCheckUp.ChechUpId);
 
             if(checkUpUpdate == null)
             {       
@@ -107,7 +107,7 @@ namespace psw_ftn.Services.CheckUpService
             .Include(c => c.Doctor)
             .Include(c => c.Patient)
             .Where(c => c.Patient.UserId == GetUserId() && DateTime.Now.AddDays(2) <= c.CancellationTime)
-            .FirstOrDefaultAsync(c => c.ChechUpId == checkUpId);
+            .FirstOrDefaultAsync(c => c.CheckUpId == checkUpId);
             
             if(checkUpUpdate == null)
             {
@@ -229,6 +229,83 @@ namespace psw_ftn.Services.CheckUpService
             {    
                 Console.WriteLine(Ex.ToString());    
             }
+        }
+
+        public async Task<ServiceResponse<List<CheckUpDto>>> GetPatientCheckUps(FilterCheckUpDto filterCheckUp)
+        {
+            var serviceResponse = new ServiceResponse<List<CheckUpDto>>();
+            List<CheckUpDto> dbCheckUps = null;
+
+            if(filterCheckUp == FilterCheckUpDto.HistoryCheckUps)
+            {
+                dbCheckUps = await context.CheckUps
+                .Include(c => c.Doctor)
+                .Include(c => c.Patient)
+                .Include(c => c.HistoryCheckUp)
+                .Where(c => c.Patient.UserId == GetUserId()
+                && c.EndTime < DateTime.Now).
+                Select(c => mapper.Map<CheckUpDto>(c)).ToListAsync();
+            }
+
+            if(filterCheckUp == FilterCheckUpDto.FutureCheckUps)
+            {
+                dbCheckUps = await context.CheckUps
+                .Include(c => c.Doctor)
+                .Include(c => c.Patient)
+                .Where(c => c.Patient.UserId == GetUserId()
+                && c.StartTime >= DateTime.Now).
+                Select(c => mapper.Map<CheckUpDto>(c)).ToListAsync();
+            }
+
+            if(dbCheckUps == null)
+            {       
+                    serviceResponse.Data = null;
+                    serviceResponse.Message = "You don't have any checkups.";
+                    serviceResponse.Success = false;
+                    return serviceResponse;
+            }
+            
+            serviceResponse.Data = dbCheckUps;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<CheckUpDto>> CheckUpFeedback(HistoryCheckUpDto checkUpFeedback)
+        {
+            var serviceResponse = new ServiceResponse<CheckUpDto>();
+            bool doesCheckUpExist = await context.CheckUps.AnyAsync(c => c.CheckUpId == checkUpFeedback.CheckUpId);
+            
+            CheckUp historyCheckUpResponse = null;
+
+            if(!doesCheckUpExist)
+            {
+                serviceResponse.Data = null;
+                serviceResponse.Message = "Check up doesn't exist";
+                serviceResponse.Success = false;
+                return serviceResponse;
+            }
+
+            try
+            {
+                context.HistoryCheckUps.Add(mapper.Map<HistoryCheckUp>(checkUpFeedback));
+
+                await context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                serviceResponse.Data = null;
+                serviceResponse.Message = e.Message;
+                serviceResponse.Success = false;
+                return serviceResponse;
+            }
+
+             historyCheckUpResponse = await context.CheckUps
+            .Include(c => c.Doctor)
+            .Include(c => c.Patient)
+            .Include(c => c.HistoryCheckUp)
+            .FirstOrDefaultAsync(c => c.CheckUpId == checkUpFeedback.CheckUpId);
+            
+            serviceResponse.Data = mapper.Map<CheckUpDto>(historyCheckUpResponse);
+            return serviceResponse;
         }
     }
 }

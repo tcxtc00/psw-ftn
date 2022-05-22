@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +65,34 @@ namespace psw_ftn.Controllers
             }
 
             return Ok(response);
+        }
+
+        [Authorize(Roles = "Patient")]
+        [HttpGet("GetPatientCheckUps/{filterCheckUp}")]
+         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> GetPatientCheckUps(FilterCheckUpDto filterCheckUp){
+            
+            var response = await checkUpService.GetPatientCheckUps(filterCheckUp);
+
+             if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+             return Ok(response);
+         }
+
+        [Authorize(Roles = "Patient")]
+        [HttpPost("CheckUpFeedback")]
+        public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CheckUpFeedback(HistoryCheckUpDto checkUpFeedback){
+            
+            var response = await checkUpService.CheckUpFeedback(checkUpFeedback);
+
+            if(response.Message == "Check up doesn't exist")
+            {
+                return NotFound(response);
+            }
+
+             return Ok(response);
         }
     }
 }

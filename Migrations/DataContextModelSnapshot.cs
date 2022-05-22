@@ -21,7 +21,7 @@ namespace psw_ftn.Migrations
 
             modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
                 {
-                    b.Property<int>("ChechUpId")
+                    b.Property<int>("CheckUpId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -41,13 +41,30 @@ namespace psw_ftn.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ChechUpId");
+                    b.HasKey("CheckUpId");
 
                     b.HasIndex("DoctorUserId");
 
                     b.HasIndex("PatientUserId");
 
                     b.ToTable("CheckUps");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
+                {
+                    b.Property<int>("CheckUpId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.HasKey("CheckUpId");
+
+                    b.ToTable("HistoryCheckUps");
                 });
 
             modelBuilder.Entity("psw_ftn.Models.User.User", b =>
@@ -117,20 +134,6 @@ namespace psw_ftn.Migrations
                     b.ToTable("CancelledCheckUps");
                 });
 
-            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
-                {
-                    b.HasBaseType("psw_ftn.Models.CheckUp");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.ToTable("HistoryCheckUps");
-                });
-
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Admin", b =>
                 {
                     b.HasBaseType("psw_ftn.Models.User.User");
@@ -174,20 +177,22 @@ namespace psw_ftn.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
+                {
+                    b.HasOne("psw_ftn.Models.CheckUp", "CheckUp")
+                        .WithOne("HistoryCheckUp")
+                        .HasForeignKey("psw_ftn.Models.HistoryCheckUp", "CheckUpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckUp");
+                });
+
             modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
                 {
                     b.HasOne("psw_ftn.Models.CheckUp", null)
                         .WithOne()
-                        .HasForeignKey("psw_ftn.Models.CancelledCheckUp", "ChechUpId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("psw_ftn.Models.HistoryCheckUp", b =>
-                {
-                    b.HasOne("psw_ftn.Models.CheckUp", null)
-                        .WithOne()
-                        .HasForeignKey("psw_ftn.Models.HistoryCheckUp", "ChechUpId")
+                        .HasForeignKey("psw_ftn.Models.CancelledCheckUp", "CheckUpId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -217,6 +222,11 @@ namespace psw_ftn.Migrations
                         .HasForeignKey("psw_ftn.Models.User.UserTypes.Patient", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
+                {
+                    b.Navigation("HistoryCheckUp");
                 });
 
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Doctor", b =>

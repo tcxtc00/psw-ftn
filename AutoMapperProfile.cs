@@ -28,8 +28,11 @@ namespace psw_ftn
             CreateMap<DrExpertiseDto, DrExpertise>();
             
             CreateMap<BookCheckUpDto, CheckUp>();
-            //CreateMap<CheckUp, GetCheckUpDto>();
             CreateMap<CheckUp, CheckUpDto>();
+            CreateMap<CheckUp, HistoryCheckUp>();
+            CreateMap<HistoryCheckUp, HistoryCheckUpDto>();
+            CreateMap<HistoryCheckUpDto, HistoryCheckUp>();
+            CreateMap<CheckUp, HistoryCheckUpDto>();
         }
     }
 }

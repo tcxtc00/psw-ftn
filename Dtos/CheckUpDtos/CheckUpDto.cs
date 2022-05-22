@@ -5,12 +5,12 @@ namespace psw_ftn.Dtos.CheckUpDtos
 {
     public class CheckUpDto
     {
-        public int ChechUpId { get; set; }
+        public int CheckUpId { get; set; }
         public PatientDto Patient { get; set; }
         public DoctorDto Doctor { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int Priority { get; set; }
         public DateTime CancellationTime { get; set; }
+        public HistoryCheckUpDto HistoryCheckUp { get; set; }
     }
 }

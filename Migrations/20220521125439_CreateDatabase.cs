@@ -84,7 +84,7 @@ namespace psw_ftn.Migrations
                 name: "CheckUps",
                 columns: table => new
                 {
-                    ChechUpId = table.Column<int>(type: "int", nullable: false)
+                    CheckUpId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PatientUserId = table.Column<int>(type: "int", nullable: true),
                     DoctorUserId = table.Column<int>(type: "int", nullable: false),
@@ -94,7 +94,7 @@ namespace psw_ftn.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CheckUps", x => x.ChechUpId);
+                    table.PrimaryKey("PK_CheckUps", x => x.CheckUpId);
                     table.ForeignKey(
                         name: "FK_CheckUps_Doctors_DoctorUserId",
                         column: x => x.DoctorUserId,
@@ -113,18 +113,18 @@ namespace psw_ftn.Migrations
                 name: "CancelledCheckUps",
                 columns: table => new
                 {
-                    ChechUpId = table.Column<int>(type: "int", nullable: false),
+                    CheckUpId = table.Column<int>(type: "int", nullable: false),
                     CancelationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CancelledCheckUps", x => x.ChechUpId);
+                    table.PrimaryKey("PK_CancelledCheckUps", x => x.CheckUpId);
                     table.ForeignKey(
-                        name: "FK_CancelledCheckUps_CheckUps_ChechUpId",
-                        column: x => x.ChechUpId,
+                        name: "FK_CancelledCheckUps_CheckUps_CheckUpId",
+                        column: x => x.CheckUpId,
                         principalTable: "CheckUps",
-                        principalColumn: "ChechUpId",
+                        principalColumn: "CheckUpId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -132,19 +132,19 @@ namespace psw_ftn.Migrations
                 name: "HistoryCheckUps",
                 columns: table => new
                 {
-                    ChechUpId = table.Column<int>(type: "int", nullable: false),
+                    CheckUpId = table.Column<int>(type: "int", nullable: false),
                     Grade = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HistoryCheckUps", x => x.ChechUpId);
+                    table.PrimaryKey("PK_HistoryCheckUps", x => x.CheckUpId);
                     table.ForeignKey(
-                        name: "FK_HistoryCheckUps_CheckUps_ChechUpId",
-                        column: x => x.ChechUpId,
+                        name: "FK_HistoryCheckUps_CheckUps_CheckUpId",
+                        column: x => x.CheckUpId,
                         principalTable: "CheckUps",
-                        principalColumn: "ChechUpId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CheckUpId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
