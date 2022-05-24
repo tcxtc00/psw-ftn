@@ -80,7 +80,7 @@ namespace psw_ftn.Services.CheckUpService
                     string specialistName = checkUpUpdate.Doctor.FirstName + " " + checkUpUpdate.Doctor.LastName;
                     string checkUpDate = checkUpUpdate.StartTime.ToString("yyyy-MM-dd HH:mm");
 
-                    createDoctorReferral(GetUserName(), patientName, specialistName, checkUpDate); 
+                    CreateDoctorReferral(GetUserName(), patientName, specialistName, checkUpDate); 
                 }
 
                 serviceResponse.Data = mapper.Map<CheckUpDto>(checkUpUpdate);
@@ -126,6 +126,8 @@ namespace psw_ftn.Services.CheckUpService
                 CancelledCheckUp cancelledCheckUp = new CancelledCheckUp{
                     CheckUpId = checkUpUpdate.CheckUpId,
                     CheckUp = checkUpUpdate,
+                    PatientId = GetUserId(),
+                    Patient = checkUpUpdate.Patient,
                     CancelationDate = DateTime.Now,
                     Comment = comment
                 };
@@ -145,6 +147,7 @@ namespace psw_ftn.Services.CheckUpService
 
             checkUpResponse.CancelledCheckUp = new CancelledCheckUpDto {
                 CancelledCheckUpId = checkUpUpdate.CancelledCheckUps[0].CancelledCheckUpId,
+                PatientId = checkUpUpdate.CancelledCheckUps[0].PatientId,
                 CancelationDate = checkUpUpdate.CancelledCheckUps[0].CancelationDate,
                 Comment = checkUpUpdate.CancelledCheckUps[0].Comment,
             };
@@ -219,7 +222,7 @@ namespace psw_ftn.Services.CheckUpService
             return serviceResponse;
         }
 
-        private void createDoctorReferral(string generalistName, string patientName, string specialistName, string checkUpDate)
+        private void CreateDoctorReferral(string generalistName, string patientName, string specialistName, string checkUpDate)
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             string documentName = "Refferal-" + generalistName + "-" + patientName + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";

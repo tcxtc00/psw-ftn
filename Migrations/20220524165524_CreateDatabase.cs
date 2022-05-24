@@ -139,6 +139,7 @@ namespace psw_ftn.Migrations
                     CancelledCheckUpId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CheckUpId = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
                     CancelationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
@@ -150,6 +151,12 @@ namespace psw_ftn.Migrations
                         column: x => x.CheckUpId,
                         principalTable: "CheckUps",
                         principalColumn: "CheckUpId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CancelledCheckUps_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -176,6 +183,11 @@ namespace psw_ftn.Migrations
                 name: "IX_CancelledCheckUps_CheckUpId",
                 table: "CancelledCheckUps",
                 column: "CheckUpId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CancelledCheckUps_PatientId",
+                table: "CancelledCheckUps",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckUps_DoctorUserId",

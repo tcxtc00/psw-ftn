@@ -36,9 +36,14 @@ namespace psw_ftn.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
                     b.HasKey("CancelledCheckUpId");
 
                     b.HasIndex("CheckUpId");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("CancelledCheckUps");
                 });
@@ -207,7 +212,15 @@ namespace psw_ftn.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("psw_ftn.Models.User.UserTypes.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CheckUp");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>

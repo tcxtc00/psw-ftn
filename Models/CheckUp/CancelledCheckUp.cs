@@ -11,6 +11,8 @@ namespace psw_ftn.Models
         public int CancelledCheckUpId { get; set; }
         public int CheckUpId { get; set; }
         public CheckUp CheckUp { get; set; }
+        public int PatientId { get; set; }
+        public Patient Patient { get; set; }
 
         [Required]
         public DateTime CancelationDate { get; set; }
