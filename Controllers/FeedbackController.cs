@@ -19,7 +19,7 @@ namespace psw_ftn.Controllers
         }
 
         [Authorize(Roles = "Patient")]
-        [HttpPost("AddFeedback")]
+        [HttpPost("Add")]
         public async Task<ActionResult<ServiceResponse<GetFeedbackDto>>> AddFeedback(AddFeedbackDto newFeedback)
         {
             var response = await feedbackService.AddFeedback(newFeedback);
@@ -47,7 +47,7 @@ namespace psw_ftn.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("Show")]
+        [HttpPut("IsVisible")]
         public async Task<ActionResult<ServiceResponse<GetFeedbackDto>>> ShowFeedback(int feedbackId, bool showFeedback)
         {
             var response = await feedbackService.ShowFeedback(feedbackId, showFeedback);

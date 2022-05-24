@@ -98,7 +98,7 @@ namespace psw_ftn.Services.CheckUpService
             }
         }
 
-        public async Task<ServiceResponse<CheckUpDto>> CancleCheckUp(int checkUpId)
+        public async Task<ServiceResponse<CheckUpDto>> CancleCheckUp(int checkUpId, string comment)
         {
             var serviceResponse = new ServiceResponse<CheckUpDto>();
             CheckUp checkUpUpdate = null;
@@ -115,12 +115,42 @@ namespace psw_ftn.Services.CheckUpService
                     serviceResponse.Success = false;
                     return serviceResponse;
             }
-            
-            checkUpUpdate.Patient = null;
-            context.CheckUps.Update(checkUpUpdate);
-            await context.SaveChangesAsync();
 
-            serviceResponse.Data = mapper.Map<CheckUpDto>(checkUpUpdate);
+            checkUpUpdate.Patient = null;
+
+            try
+            {
+                context.CheckUps.Update(checkUpUpdate);
+                await context.SaveChangesAsync();
+
+                CancelledCheckUp cancelledCheckUp = new CancelledCheckUp{
+                    CheckUpId = checkUpUpdate.CheckUpId,
+                    CheckUp = checkUpUpdate,
+                    CancelationDate = DateTime.Now,
+                    Comment = comment
+                };
+
+                context.CancelledCheckUps.Add(cancelledCheckUp);
+                await context.SaveChangesAsync();
+
+            }
+            catch (System.Exception e)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = e.Message;
+                return serviceResponse;
+            }
+
+            CheckUpDto checkUpResponse = mapper.Map<CheckUpDto>(checkUpUpdate);
+
+            checkUpResponse.CancelledCheckUp = new CancelledCheckUpDto {
+                CancelledCheckUpId = checkUpUpdate.CancelledCheckUps[0].CancelledCheckUpId,
+                CancelationDate = checkUpUpdate.CancelledCheckUps[0].CancelationDate,
+                Comment = checkUpUpdate.CancelledCheckUps[0].Comment,
+            };
+
+            serviceResponse.Data = checkUpResponse;
+            serviceResponse.Data.CancelledCheckUp = checkUpResponse.CancelledCheckUp; 
             return serviceResponse;
         }
 

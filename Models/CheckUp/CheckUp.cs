@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using psw_ftn.Models.User.UserTypes;
 
@@ -25,5 +26,7 @@ namespace psw_ftn.Models
         public DateTime CancellationTime { get; set; }
 
         public HistoryCheckUp HistoryCheckUp { get; set; }
+
+        public List<CancelledCheckUp> CancelledCheckUps { get; set; }
     }
 }

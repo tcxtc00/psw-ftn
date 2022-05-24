@@ -34,6 +34,10 @@ namespace psw_ftn
             CreateMap<HistoryCheckUp, HistoryCheckUpDto>();
             CreateMap<HistoryCheckUpDto, HistoryCheckUp>();
             CreateMap<CheckUp, HistoryCheckUpDto>();
+            CreateMap<CancelledCheckUp, CheckUp>();
+            CreateMap<CheckUp, CancelledCheckUp>();
+            CreateMap<CancelledCheckUp, CancelledCheckUpDto>();
+
             CreateMap<AddFeedbackDto, Feedback>();
             CreateMap<Feedback, GetFeedbackDto>();
         }

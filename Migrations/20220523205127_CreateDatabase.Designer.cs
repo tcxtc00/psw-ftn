@@ -10,7 +10,7 @@ using psw_ftn.Data;
 namespace psw_ftn.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220522083338_CreateDatabase")]
+    [Migration("20220523205127_CreateDatabase")]
     partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,30 @@ namespace psw_ftn.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
+
+            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
+                {
+                    b.Property<int>("CancelledCheckUpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CancelationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CheckUpId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("CancelledCheckUpId");
+
+                    b.HasIndex("CheckUpId");
+
+                    b.ToTable("CancelledCheckUps");
+                });
 
             modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
                 {
@@ -151,20 +175,6 @@ namespace psw_ftn.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
-                {
-                    b.HasBaseType("psw_ftn.Models.CheckUp");
-
-                    b.Property<DateTime>("CancelationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.ToTable("CancelledCheckUps");
-                });
-
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Admin", b =>
                 {
                     b.HasBaseType("psw_ftn.Models.User.User");
@@ -189,6 +199,17 @@ namespace psw_ftn.Migrations
                     b.HasBaseType("psw_ftn.Models.User.User");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
+                {
+                    b.HasOne("psw_ftn.Models.CheckUp", "CheckUp")
+                        .WithMany("CancelledCheckUps")
+                        .HasForeignKey("CheckUpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckUp");
                 });
 
             modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
@@ -230,15 +251,6 @@ namespace psw_ftn.Migrations
                     b.Navigation("CheckUp");
                 });
 
-            modelBuilder.Entity("psw_ftn.Models.CancelledCheckUp", b =>
-                {
-                    b.HasOne("psw_ftn.Models.CheckUp", null)
-                        .WithOne()
-                        .HasForeignKey("psw_ftn.Models.CancelledCheckUp", "CheckUpId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("psw_ftn.Models.User.UserTypes.Admin", b =>
                 {
                     b.HasOne("psw_ftn.Models.User.User", null)
@@ -268,6 +280,8 @@ namespace psw_ftn.Migrations
 
             modelBuilder.Entity("psw_ftn.Models.CheckUp", b =>
                 {
+                    b.Navigation("CancelledCheckUps");
+
                     b.Navigation("HistoryCheckUp");
                 });
 

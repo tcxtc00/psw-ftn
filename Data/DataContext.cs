@@ -18,12 +18,10 @@ namespace psw_ftn.Data
             .HasIndex(u => u.Email)
             .IsUnique();
 
-            
             modelBuilder.Entity<Doctor>().ToTable("Doctors");
             modelBuilder.Entity<Patient>().ToTable("Patients");
             modelBuilder.Entity<Admin>().ToTable("Admins");
             modelBuilder.Entity<CheckUp>().ToTable("CheckUps");
-            modelBuilder.Entity<CancelledCheckUp>().ToTable("CancelledCheckUps"); 
         }
 
         public DbSet<User> Users { get; set; }

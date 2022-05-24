@@ -1,10 +1,17 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using psw_ftn.Models.User.UserTypes;
 
 namespace psw_ftn.Models
 {
-    public class CancelledCheckUp : CheckUp
+    public class CancelledCheckUp
     {
+        [Key]
+        public int CancelledCheckUpId { get; set; }
+        public int CheckUpId { get; set; }
+        public CheckUp CheckUp { get; set; }
+
         [Required]
         public DateTime CancelationDate { get; set; }
 

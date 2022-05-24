@@ -21,7 +21,7 @@ namespace psw_ftn.Controllers
             this.checkUpService = checkUpService;
         }
 
-        [HttpPut("BookCheckUp")]
+        [HttpPut("Book")]
         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> BookCheckUp(BookCheckUpDto bookCheckUp)
         {
             var response = await checkUpService.BookCheckUp(bookCheckUp);
@@ -54,10 +54,10 @@ namespace psw_ftn.Controllers
         }
 
         [Authorize(Roles = "Patient")]
-        [HttpPut("CancleCheckUp")]
-        public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancleCheckUp(int checkUpId)
+        [HttpPut("Cancle")]
+        public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancleCheckUp(int checkUpId, string comment)
         {
-            var response = await checkUpService.CancleCheckUp(checkUpId);
+            var response = await checkUpService.CancleCheckUp(checkUpId, comment);
 
             if(response.Data == null)
             {
@@ -82,7 +82,7 @@ namespace psw_ftn.Controllers
          }
 
         [Authorize(Roles = "Patient")]
-        [HttpPost("CheckUpFeedback")]
+        [HttpPost("AddFeedback")]
         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CheckUpFeedback(HistoryCheckUpDto checkUpFeedback){
             
             var response = await checkUpService.CheckUpFeedback(checkUpFeedback);

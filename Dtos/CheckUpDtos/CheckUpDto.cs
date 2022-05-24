@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using psw_ftn.Dtos.UserDtos;
 
 namespace psw_ftn.Dtos.CheckUpDtos
@@ -12,5 +13,6 @@ namespace psw_ftn.Dtos.CheckUpDtos
         public DateTime EndTime { get; set; }
         public DateTime CancellationTime { get; set; }
         public HistoryCheckUpDto HistoryCheckUp { get; set; }
+        public CancelledCheckUpDto CancelledCheckUp { get; set; }
     }
 }
