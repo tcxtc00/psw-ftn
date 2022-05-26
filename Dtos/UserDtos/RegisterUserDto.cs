@@ -12,7 +12,7 @@ namespace psw_ftn.Dtos
         public string City { get; set; }
         public string Phone { get; set; }
         public RoleDto Role { get; set; }
-        public int Status { get; set; }
+        public StatusDto Status { get; set; }
         public DrExpertiseDto Expertise { get; set; }
     }
 }

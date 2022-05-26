@@ -31,7 +31,7 @@ namespace psw_ftn.Models.User
         public string Phone { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public Status Status { get; set; }
 
         [Required]
         public byte[] PasswordSalt { get; set; }

@@ -1,3 +1,5 @@
+using psw_ftn.Dtos.UserDtos;
+
 namespace psw_ftn.Dtos
 {
     public class UpdateUserDto
@@ -10,7 +12,7 @@ namespace psw_ftn.Dtos
         public string Street { get; set; }
         public string City { get; set; }
         public string Phone { get; set; }
-        public int Status { get; set; }
+        public StatusDto Status { get; set; }
         public byte[] PasswordSalt { get; set; }
     }
 }

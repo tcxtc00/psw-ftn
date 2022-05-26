@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 namespace psw_ftn.Dtos.UserDtos
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum RoleDto
+    public enum StatusDto
     {
-        Patient,
-        Doctor,
-        Admin,
-        Undefined
+        Blocked,
+        Active,
+        Malicious,
+        NotMalicious
     }
 }

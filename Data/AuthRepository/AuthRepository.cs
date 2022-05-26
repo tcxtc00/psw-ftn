@@ -42,6 +42,11 @@ namespace psw_ftn.Data
                 response.Success = false;
                 response.Message = "Wrong password.";
             }
+            else if(user.Status == Status.Blocked)
+            {
+                response.Success = false;
+                response.Message = "User is blocked.";
+            }
             else
             {
                 response.Data = CreateToken(user);
@@ -51,7 +56,7 @@ namespace psw_ftn.Data
         }
         public async Task<ServiceResponse<UserDto>> Register(RegisterUserDto request)
         {
-            User user = Utility.UserFromRole(request);
+            User user = Utility.UserFromRole(request, mapper);
 
             ServiceResponse<UserDto> response = new ServiceResponse<UserDto>();
             if (await UserExists(user.Email))

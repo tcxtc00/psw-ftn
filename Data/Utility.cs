@@ -1,3 +1,4 @@
+using AutoMapper;
 using psw_ftn.Dtos;
 using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models.User;
@@ -15,7 +16,7 @@ namespace psw_ftn.Data
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-        public static User UserFromRole(RegisterUserDto request)
+        public static User UserFromRole(RegisterUserDto request, IMapper mapper)
         {
             User user = null;
 
@@ -29,7 +30,7 @@ namespace psw_ftn.Data
                     City = request.City,
                     Street = request.Street,
                     Phone = request.Phone,
-                    Status = request.Status,
+                    Status = mapper.Map<Status>(request.Status),
                     Expertise = request.Expertise.ToString()
                 };
             }
@@ -44,7 +45,7 @@ namespace psw_ftn.Data
                     City = request.City,
                     Street = request.Street,
                     Phone = request.Phone,
-                    Status = request.Status
+                    Status = mapper.Map<Status>(request.Status),
                 };
             }
             //Ukloniti Admina, jer se on zadaje kroz bazu
@@ -58,7 +59,7 @@ namespace psw_ftn.Data
                     City = request.City,
                     Street = request.Street,
                     Phone = request.Phone,
-                    Status = request.Status
+                    Status = mapper.Map<Status>(request.Status),
                 };
             }
             return user;
