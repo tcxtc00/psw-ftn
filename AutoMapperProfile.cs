@@ -25,7 +25,6 @@ namespace psw_ftn
             CreateMap<StatusDto, Status>();
             CreateMap<Patient, UserDto>();
             CreateMap<Doctor, UserDto>();
-            //Izbrisati, Admin se dodaje kroz bazu
             CreateMap<Admin, UserDto>();
             CreateMap<AddUserDto, User>();
             CreateMap<DrExpertiseDto, DrExpertise>();

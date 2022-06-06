@@ -50,7 +50,7 @@ namespace psw_ftn.Services.PharmacyService
             var response = new ServiceResponse<MedicineResponseDto>();
 
             var httpClientHandler = new HttpClientHandler();
-            //omogucava vezu bez sertifikata
+            //enables communication without certificate
             httpClientHandler.ServerCertificateCustomValidationCallback = 
             HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             var httpClient = new HttpClient(httpClientHandler);
@@ -60,7 +60,6 @@ namespace psw_ftn.Services.PharmacyService
             
             try
             {
-                //zahtevamo nabavku leka
                 MedicineRequest medicine = new MedicineRequest() { Name = name, Quantity = quantity};
                 using (var call = client.GetMedicine(medicine))
                 {

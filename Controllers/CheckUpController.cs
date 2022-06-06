@@ -10,7 +10,7 @@ using psw_ftn.Services.CheckUpService;
 
 namespace psw_ftn.Controllers
 {
-    [Authorize(Roles = "Doctor,Admin,Patient")]
+    [Authorize(Roles = "Doctor,Patient")]
     [ApiController]
     [Route("[controller]")]
     public class CheckUpController : ControllerBase
@@ -34,6 +34,7 @@ namespace psw_ftn.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("GetDoctors")]
         public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetDoctorsByExpertise(DrExpertiseDto expertise)
         {
@@ -54,10 +55,10 @@ namespace psw_ftn.Controllers
         }
 
         [Authorize(Roles = "Patient")]
-        [HttpPut("Cancle")]
-        public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancleCheckUp(int checkUpId, string comment)
+        [HttpPut("Cancel")]
+        public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancelCheckUp(int checkUpId, string comment)
         {
-            var response = await checkUpService.CancleCheckUp(checkUpId, comment);
+            var response = await checkUpService.CancelCheckUp(checkUpId, comment);
 
             if(response.Data == null)
             {

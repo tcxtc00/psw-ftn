@@ -12,6 +12,7 @@ using psw_ftn.Data;
 using psw_ftn.Dtos.CheckUpDtos;
 using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models;
+using psw_ftn.Models.User;
 using psw_ftn.Models.User.UserTypes;
 
 namespace psw_ftn.Services.CheckUpService
@@ -98,7 +99,7 @@ namespace psw_ftn.Services.CheckUpService
             }
         }
 
-        public async Task<ServiceResponse<CheckUpDto>> CancleCheckUp(int checkUpId, string comment)
+        public async Task<ServiceResponse<CheckUpDto>> CancelCheckUp(int checkUpId, string comment)
         {
             var serviceResponse = new ServiceResponse<CheckUpDto>();
             CheckUp checkUpUpdate = null;
@@ -111,7 +112,7 @@ namespace psw_ftn.Services.CheckUpService
             
             if(checkUpUpdate == null)
             {
-                    serviceResponse.Message = "Can't cancle checkup for given check up id.";
+                    serviceResponse.Message = "Can't cancel checkup for given check up id.";
                     serviceResponse.Success = false;
                     return serviceResponse;
             }
@@ -134,7 +135,24 @@ namespace psw_ftn.Services.CheckUpService
 
                 context.CancelledCheckUps.Add(cancelledCheckUp);
                 await context.SaveChangesAsync();
+                
+                var potentialMaliciousUser = cancelledCheckUp.Patient;
 
+                //Change user status to malicious if needed
+                if(potentialMaliciousUser.Status == Status.Active)
+                {
+                    //check if user have cancelled checku ups in range of one month
+                    if(context.CancelledCheckUps
+                        .Where(c => c.PatientId == cancelledCheckUp.Patient.UserId
+                        && c.CancelationDate.AddDays(30) >= DateTime.Now )
+                        .Count() >= 3)
+                    {
+                        potentialMaliciousUser.Status = Status.Malicious;
+                        context.Users.Update(potentialMaliciousUser);
+                    }
+                }
+
+                await context.SaveChangesAsync();
             }
             catch (System.Exception e)
             {

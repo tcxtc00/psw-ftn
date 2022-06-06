@@ -27,38 +27,10 @@ namespace psw_ftn.Services.UserService
         public async Task<ServiceResponse<List<GetUserDto>>> GetMaliciousUsers()
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            //get all canceled checkups
-            var dbCanceledCheckUps = await context.CancelledCheckUps.Include(c => c.Patient).ToListAsync();
-           
-            var usersFromCheckUps = new List<User>();
-           //get all users from cancelled checkups
-            foreach(CancelledCheckUp checkUp in dbCanceledCheckUps)
-            {     
-                if(checkUp.Patient.Status != Status.NotMalicious && 
-                checkUp.Patient.Status != Status.Blocked)
-                {
-                    usersFromCheckUps.Add(checkUp.Patient);  
-                }
-            }
-
-            //if user is present more than 2 times, he is added to mallicous users list
-            var dbMaliciousUsers = (from item in usersFromCheckUps
-               group item by item into itemGroup
-               where itemGroup.Count() >= 3 
-               select itemGroup.Key).ToList();
-
-            foreach(User user in dbMaliciousUsers)
-            {
-                if(user.Status == Status.Active)
-                {
-                    user.Status=Status.Malicious;
-                    context.Users.Update(user);
-                    await context.SaveChangesAsync();
-                }
-
-            }
-
-            serviceResponse.Data = dbMaliciousUsers.Select(u => mapper.Map<GetUserDto>(u)).ToList();
+            
+            serviceResponse.Data =  await context.Users
+            .Where(user => user.Status == Status.Malicious)
+            .Select(u => mapper.Map<GetUserDto>(u)).ToListAsync();
             return serviceResponse;
         }
 
