@@ -22,7 +22,7 @@ namespace psw_ftn.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<ServiceResponse<int>>> Register(RegisterUserDto request)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> Register(RegisterUserDto request)
         {
             var response = await authRepo.Register(request);
 
