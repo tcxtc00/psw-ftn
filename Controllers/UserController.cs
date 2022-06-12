@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using psw_ftn.Dtos;
+using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models;
 using psw_ftn.Models.User;
 using psw_ftn.Services.UserService;
@@ -21,28 +24,22 @@ namespace psw_ftn.Controllers
             this.userService = userService;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> Get()
+        [HttpGet("GetMallicious")]
+        public async Task<ActionResult<ServiceResponse<List<User>>>> GetMallicious()
         {
-            return Ok(await userService.GetAllUsers());
+            return Ok(await userService.GetMaliciousUsers());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<User>>> GetSingle(int id)
+        [HttpGet("GetBlocked")]
+        public async Task<ActionResult<ServiceResponse<List<User>>>> GetBlocked()
         {
-            return Ok(await userService.getUserById(id));
-        }
+            return Ok(await userService.GetBlockedUsers());
+        }        
 
-        [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(AddUserDto newUser)
+        [HttpPut("ChangeStatus")]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> ChangeUserStatus(StatusDto userStatus, int userId)
         {
-            return Ok(await userService.addUser(newUser));
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto updateUser)
-        {
-            var response = await userService.UpdateUser(updateUser);
+            var response = await userService.ChangeUserStatus(userStatus, userId);
 
             if(response.Data == null)
             {
@@ -51,20 +48,5 @@ namespace psw_ftn.Controllers
 
             return Ok(response);
         }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Delete(int id)
-        {
-           var response = await userService.DeleteUser(id);
-
-            if(response.Data == null)
-            {
-                return NotFound(response);
-            }
-
-            return Ok(response);
-        }
-
-        
     }
 }

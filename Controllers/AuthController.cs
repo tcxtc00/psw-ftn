@@ -35,7 +35,7 @@ namespace psw_ftn.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(LoginUserDto request)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> Login(LoginUserDto request)
         {
             var response = await authRepo.Login(request.Email, request.Password);   
 

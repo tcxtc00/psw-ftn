@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using psw_ftn.Data;
 using psw_ftn.Dtos;
+using psw_ftn.Dtos.UserDtos;
 using psw_ftn.Models;
 using psw_ftn.Models.User;
 
@@ -22,47 +23,25 @@ namespace psw_ftn.Services.UserService
             this.mapper = mapper;
             this.context = context;
         }
-        public async Task<ServiceResponse<List<GetUserDto>>> addUser(AddUserDto newUser)
+
+        public async Task<ServiceResponse<List<GetUserDto>>> GetMaliciousUsers()
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            User user = mapper.Map<User>(newUser); 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
-            serviceResponse.Data = await context.Users.Select(u => mapper.Map<GetUserDto>(u)).ToListAsync();
-            return serviceResponse;
-        }
-        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
-        {
-            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            var dbUsers = await context.Users.ToListAsync();
-            serviceResponse.Data = dbUsers.Select(u => mapper.Map<GetUserDto>(u)).ToList();
+            
+            serviceResponse.Data =  await context.Users
+            .Where(user => user.Status == Status.Malicious)
+            .Select(u => mapper.Map<GetUserDto>(u)).ToListAsync();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<GetUserDto>> getUserById(int id)
-        {
-            var serviceResponse = new ServiceResponse<GetUserDto>();
-            var dbUser = await context.Users.FirstOrDefaultAsync(u => u.UserId == id);
-            serviceResponse.Data = mapper.Map<GetUserDto>(dbUser);
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updateUser)
+        public async Task<ServiceResponse<GetUserDto>> ChangeUserStatus(StatusDto userStatus, int userId)
         {
             var serviceResponse = new ServiceResponse<GetUserDto>();
             try {
-                User user = await context.Users.FirstOrDefaultAsync(u => u.UserId == updateUser.UserId);
+                User user = await context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+                user.Status = mapper.Map<Status>(userStatus);
 
-                user.FirstName = updateUser.FirstName;
-                user.LastName = updateUser.LastName;
-                user.Email = updateUser.Email;
-                user.PasswordHash = updateUser.PasswordHash;
-                user.PasswordSalt = updateUser.PasswordSalt;
-                user.City = updateUser.City;
-                user.Street = updateUser.Street;
-                user.Phone = updateUser.Phone;
-                user.Status = updateUser.Status;
-
+                context.Users.Update(user);
                 await context.SaveChangesAsync();
 
                 serviceResponse.Data = mapper.Map<GetUserDto>(user);
@@ -76,21 +55,13 @@ namespace psw_ftn.Services.UserService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
+        public async Task<ServiceResponse<List<GetUserDto>>> GetBlockedUsers()
         {
-           var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            try {
-                User user = await context.Users.FirstAsync(u => u.UserId == id);
-                context.Users.Remove(user);
-                await context.SaveChangesAsync();
-                serviceResponse.Data = context.Users.Select(u => mapper.Map<GetUserDto>(u)).ToList();
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
-            }
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            
+            var dbBlockedUsers = await context.Users.Where(u => u.Status == Status.Blocked).ToListAsync();
 
+            serviceResponse.Data = dbBlockedUsers.Select(u => mapper.Map<GetUserDto>(u)).ToList();
             return serviceResponse;
         }
     }

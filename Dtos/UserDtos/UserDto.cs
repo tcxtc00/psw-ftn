@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace psw_ftn.Dtos.UserDtos
 {
     public class UserDto
@@ -10,7 +13,13 @@ namespace psw_ftn.Dtos.UserDtos
         public string City { get; set; }
         public string Phone { get; set; }
         public int Status { get; set; }
+        
+        [JsonConverter(typeof(StringEnumConverter))]
         public RoleDto Role { get; set; }
+        
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string Expertise { get; set; }
+        public string ImageUrl { get; set; }
+        public string AccessToken { get; set; }
     }
 }
