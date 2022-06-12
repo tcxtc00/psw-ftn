@@ -27,9 +27,9 @@ namespace psw_ftn.Data
             this.configuration = configuration;
             this.context = context;
         }
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<UserDto>> Login(string email, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<UserDto>();
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
             if (user == null)
@@ -49,7 +49,9 @@ namespace psw_ftn.Data
             }
             else
             {
-                response.Data = CreateToken(user);
+                response.Data = mapper.Map<UserDto>(user);
+                response.Data.Role = Utility.RoleFromUser(user);
+                response.Data.AccessToken = CreateToken(user);
             }
 
             return response;
@@ -76,6 +78,8 @@ namespace psw_ftn.Data
 
             response.Data = mapper.Map<UserDto>(user);
             response.Data.Role = Utility.RoleFromUser(user);
+            response.Data.AccessToken = CreateToken(user);
+            
             return response;
         }
         public async Task<bool> UserExists(string email)

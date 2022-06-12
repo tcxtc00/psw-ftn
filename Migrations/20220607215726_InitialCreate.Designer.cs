@@ -10,8 +10,8 @@ using psw_ftn.Data;
 namespace psw_ftn.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220524165524_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20220607215726_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -147,6 +147,9 @@ namespace psw_ftn.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()

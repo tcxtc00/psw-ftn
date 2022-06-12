@@ -32,7 +32,7 @@ namespace psw_ftn.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Patient,Doctor")]
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetFeedbackDto>>>> GetAllFeedbacks()
         {

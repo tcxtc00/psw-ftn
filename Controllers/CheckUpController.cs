@@ -35,7 +35,14 @@ namespace psw_ftn.Controllers
         }
 
         [Authorize(Roles = "Doctor,Patient")]
-        [HttpGet("GetDoctors")]
+        [HttpGet("GetAllDoctors")]
+        public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetAllDoctors()
+        {
+            return Ok(await checkUpService.GetAllDoctors());
+        }
+
+        [Authorize(Roles = "Doctor,Patient")]
+        [HttpGet("GetDoctorsByExpertise")]
         public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetDoctorsByExpertise(DrExpertiseDto expertise)
         {
             return Ok(await checkUpService.GetDoctorsByExpertise(expertise));
@@ -59,11 +66,6 @@ namespace psw_ftn.Controllers
         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancelCheckUp(int checkUpId, string comment)
         {
             var response = await checkUpService.CancelCheckUp(checkUpId, comment);
-
-            if(response.Data == null)
-            {
-                return NotFound(response);
-            }
 
             return Ok(response);
         }

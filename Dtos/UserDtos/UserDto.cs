@@ -19,5 +19,7 @@ namespace psw_ftn.Dtos.UserDtos
         
         [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public string Expertise { get; set; }
+        public string ImageUrl { get; set; }
+        public string AccessToken { get; set; }
     }
 }

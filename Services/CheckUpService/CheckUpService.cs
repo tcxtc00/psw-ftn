@@ -104,6 +104,15 @@ namespace psw_ftn.Services.CheckUpService
             var serviceResponse = new ServiceResponse<CheckUpDto>();
             CheckUp checkUpUpdate = null;
 
+            bool doesCheckUpExist = await context.CheckUps.AnyAsync(c => c.CheckUpId == checkUpId);
+
+            if(!doesCheckUpExist)
+            {
+                serviceResponse.Message = "Check up with check up id: " + checkUpId.ToString() + " doesn't exist.";
+                serviceResponse.Success = false;
+                return serviceResponse;
+            }
+
             checkUpUpdate = await context.CheckUps
             .Include(c => c.Doctor)
             .Include(c => c.Patient)
@@ -112,7 +121,7 @@ namespace psw_ftn.Services.CheckUpService
             
             if(checkUpUpdate == null)
             {
-                    serviceResponse.Message = "Can't cancel checkup for given check up id.";
+                    serviceResponse.Message = "Can't cancel checkup because cancellation time has passed.";
                     serviceResponse.Success = false;
                     return serviceResponse;
             }
@@ -229,12 +238,31 @@ namespace psw_ftn.Services.CheckUpService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<UserDto>>> GetAllDoctors()
+        {
+            var serviceResponse = new ServiceResponse<List<UserDto>>();
+            List<UserDto> dbDoctors = await context.Doctors
+            .Select(u => mapper.Map<UserDto>(u)).ToListAsync();
+            
+            foreach(UserDto doctor in dbDoctors){
+                doctor.Role = RoleDto.Doctor;
+            }
+            
+            serviceResponse.Data = dbDoctors;
+
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<List<UserDto>>> GetDoctorsByExpertise(DrExpertiseDto expertise)
         {
             var serviceResponse = new ServiceResponse<List<UserDto>>();
             List<UserDto> dbDoctors = await context.Doctors
             .Where(d => d.Expertise.Equals(expertise.ToString()))
             .Select(u => mapper.Map<UserDto>(u)).ToListAsync();
+            
+            foreach(UserDto doctor in dbDoctors){
+                doctor.Role = RoleDto.Doctor;
+            }
+
             serviceResponse.Data = dbDoctors;
 
             return serviceResponse;

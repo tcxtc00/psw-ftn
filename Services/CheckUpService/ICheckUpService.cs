@@ -12,6 +12,7 @@ namespace psw_ftn.Services.CheckUpService
     {
         Task<ServiceResponse<CheckUpDto>> BookCheckUp(BookCheckUpDto newCheckUp);
         Task<ServiceResponse<List<CheckUpDto>>> GetAvailableCheckUps(int doctorId, DateTime startIntervalTime, DateTime endIntervalTime, CheckUpPriorityDto priority);
+        Task<ServiceResponse<List<UserDto>>> GetAllDoctors();
         Task<ServiceResponse<List<UserDto>>> GetDoctorsByExpertise(DrExpertiseDto expertise);
         Task<ServiceResponse<CheckUpDto>> CancelCheckUp(int checkUpId, string comment);
         Task<ServiceResponse<List<CheckUpDto>>> GetPatientCheckUps(FilterCheckUpDto filterCheckUp);

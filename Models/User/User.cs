@@ -35,5 +35,6 @@ namespace psw_ftn.Models.User
 
         [Required]
         public byte[] PasswordSalt { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace psw_ftn.Data
     public interface IAuthRepository
     {
         Task<ServiceResponse<UserDto>> Register(RegisterUserDto request);
-        Task<ServiceResponse<string>> Login(string email, string password);
+        Task<ServiceResponse<UserDto>> Login(string email, string password);
         Task<bool> UserExists(string email);
     }
 }
