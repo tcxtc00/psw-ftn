@@ -55,7 +55,7 @@ namespace psw_ftn.Services.CheckUpService
             .Include(c => c.Doctor)
             .Where(c => c.Doctor.Expertise == drExpertiseQuery
             && c.Patient == null)
-            .FirstOrDefaultAsync(c => c.CheckUpId == bookCheckUp.ChechUpId);
+            .FirstOrDefaultAsync(c => c.CheckUpId == bookCheckUp.CheckUpId);
 
             if(checkUpUpdate == null)
             {       
