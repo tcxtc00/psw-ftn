@@ -58,6 +58,7 @@ namespace psw_ftn.Data
         }
         public async Task<ServiceResponse<UserDto>> Register(RegisterUserDto request)
         {
+            request.Status = StatusDto.Active;
             User user = Utility.UserFromRole(request, mapper);
 
             ServiceResponse<UserDto> response = new ServiceResponse<UserDto>();
