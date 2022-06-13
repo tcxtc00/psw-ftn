@@ -53,11 +53,6 @@ namespace psw_ftn.Controllers
         {
             var response = await checkUpService.GetAvailableCheckUps(doctorId, startIntervalTime, endIntervalTime, priority);
 
-            if(response.Data == null)
-            {
-                return NotFound(response);
-            }
-
             return Ok(await checkUpService.GetAvailableCheckUps(doctorId, startIntervalTime, endIntervalTime, priority));
         }
 
