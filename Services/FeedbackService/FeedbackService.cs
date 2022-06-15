@@ -29,6 +29,7 @@ namespace psw_ftn.Services.FeedbackService
 
         public async Task<ServiceResponse<GetFeedbackDto>> AddFeedback(AddFeedbackDto newFeedback)
         {
+            newFeedback.isForDisplay = false;
             var serviceResponse = new ServiceResponse<GetFeedbackDto>();
             Feedback feedback = mapper.Map<Feedback>(newFeedback);
             feedback.PatientId = GetUserId();
