@@ -252,6 +252,22 @@ namespace psw_ftn.Services.CheckUpService
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<UserDto>>> GetAllPatients()
+        {
+            var serviceResponse = new ServiceResponse<List<UserDto>>();
+            List<UserDto> dbPatients = await context.Patients
+            .Select(u => mapper.Map<UserDto>(u)).ToListAsync();
+            
+            foreach(UserDto patient in dbPatients){
+                patient.Role = RoleDto.Patient;
+            }
+            
+            serviceResponse.Data = dbPatients;
+
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<List<UserDto>>> GetDoctorsByExpertise(DrExpertiseDto expertise)
         {
             var serviceResponse = new ServiceResponse<List<UserDto>>();
