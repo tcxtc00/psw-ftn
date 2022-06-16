@@ -41,6 +41,13 @@ namespace psw_ftn.Controllers
             return Ok(await checkUpService.GetAllDoctors());
         }
 
+        [Authorize(Roles = "Doctor")]
+        [HttpGet("GetAllPatients")]
+        public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetAllPatients()
+        {
+            return Ok(await checkUpService.GetAllPatients());
+        }
+
         [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("GetDoctorsByExpertise")]
         public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetDoctorsByExpertise(DrExpertiseDto expertise)
