@@ -19,7 +19,7 @@ namespace psw_ftn.Controllers
             this.pharmacyService = pharmacyService;
         }
         
-        [HttpPost("/Recipe")]
+        [HttpPost("Recipe")]
         public ActionResult<ServiceResponse<RecipeDto>> PostRecipe(RecipeDto recipe)
         {
             var response = pharmacyService.PostRecipe(recipe);
