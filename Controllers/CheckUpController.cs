@@ -10,7 +10,6 @@ using psw_ftn.Services.CheckUpService;
 
 namespace psw_ftn.Controllers
 {
-    [Authorize(Roles = "Doctor,Patient")]
     [ApiController]
     [Route("[controller]")]
     public class CheckUpController : ControllerBase
@@ -21,6 +20,7 @@ namespace psw_ftn.Controllers
             this.checkUpService = checkUpService;
         }
 
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpPut("Book")]
         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> BookCheckUp(BookCheckUpDto bookCheckUp)
         {
@@ -34,7 +34,7 @@ namespace psw_ftn.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Doctor,Patient")]
+        [Authorize(Roles = "Doctor,Patient,Admin")]
         [HttpGet("GetAllDoctors")]
         public async Task<ActionResult<ServiceResponse<List<UserDto>>>> GetAllDoctors()
         {
@@ -55,6 +55,7 @@ namespace psw_ftn.Controllers
             return Ok(await checkUpService.GetDoctorsByExpertise(expertise));
         }
 
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("GetAvailableCheckUps/{doctorId}/{startIntervalTime}/{endIntervalTime}/{priority}")]
         public async Task<ActionResult<ServiceResponse<List<CheckUpDto>>>> GetAvailableCheckUps(int doctorId, DateTime startIntervalTime, DateTime endIntervalTime, CheckUpPriorityDto priority)
         {

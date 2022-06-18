@@ -70,7 +70,7 @@ namespace psw_ftn.Services.FeedbackService
             if(dbFeedback == null)
             {
                 serviceResponse.Success = false;
-                serviceResponse.Message = "Feedback with id:" + feedbackId.ToString() + "doesn't exist.";
+                serviceResponse.Message = "Feedback with id: " + feedbackId.ToString() + " doesn't exist.";
                 return serviceResponse;
             }
 
