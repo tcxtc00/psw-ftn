@@ -74,7 +74,7 @@ namespace psw_ftn.Services.PharmacyService
                     }
                 }
 
-                if(response.Data.errorMsg != "Success")
+                if(response.Message != "Success")
                 {
                     response.Success = false;
                 }
