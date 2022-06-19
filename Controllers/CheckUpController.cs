@@ -75,7 +75,7 @@ namespace psw_ftn.Controllers
 
         [Authorize(Roles = "Patient")]
         [HttpGet("GetPatientCheckUps/{filterCheckUp}")]
-         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> GetPatientCheckUps(FilterCheckUpDto filterCheckUp){
+         public async Task<ActionResult<ServiceResponse<List<CheckUpDto>>>> GetPatientCheckUps(FilterCheckUpDto filterCheckUp){
             
             var response = await checkUpService.GetPatientCheckUps(filterCheckUp);
 
