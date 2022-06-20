@@ -59,8 +59,6 @@ namespace psw_ftn.Controllers
         [HttpGet("GetAvailableCheckUps/{doctorId}/{startIntervalTime}/{endIntervalTime}/{priority}")]
         public async Task<ActionResult<ServiceResponse<List<CheckUpDto>>>> GetAvailableCheckUps(int doctorId, DateTime startIntervalTime, DateTime endIntervalTime, CheckUpPriorityDto priority)
         {
-            var response = await checkUpService.GetAvailableCheckUps(doctorId, startIntervalTime, endIntervalTime, priority);
-
             return Ok(await checkUpService.GetAvailableCheckUps(doctorId, startIntervalTime, endIntervalTime, priority));
         }
 
@@ -69,6 +67,11 @@ namespace psw_ftn.Controllers
         public async Task<ActionResult<ServiceResponse<CheckUpDto>>> CancelCheckUp(int checkUpId, string comment)
         {
             var response = await checkUpService.CancelCheckUp(checkUpId, comment);
+
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
 
             return Ok(response);
         }
