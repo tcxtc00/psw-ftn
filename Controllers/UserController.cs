@@ -25,13 +25,13 @@ namespace psw_ftn.Controllers
         }
 
         [HttpGet("GetMallicious")]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> GetMallicious()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> GetMallicious()
         {
             return Ok(await userService.GetMaliciousUsers());
         }
 
         [HttpGet("GetBlocked")]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> GetBlocked()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> GetBlocked()
         {
             return Ok(await userService.GetBlockedUsers());
         }        
